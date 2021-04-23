@@ -1,6 +1,8 @@
 import { Level } from "./Level"
 import { GhostKind } from "./Ghost"
-import { isPartiallyEmittedExpression } from "typescript"
+import { Grid, Cell } from "./Grid"
+import * as grid from "./Grid"
+import { Vector, addVector } from './Vector'
 
 export type Game = {
     grid: Grid;
@@ -8,13 +10,9 @@ export type Game = {
     ghosts: { pos: Vector, direction: Direction, ghostKind: GhostKind }[]
 }
 
-type Grid= Cell[][];
-
-type Vector = [number, number]
-
 type Direction = "Up" | "Right" | "Down" | "Left"
 
-type Cell = 'Wall' | 'Coin' | 'Empty'
+
 
 type Config = { level: Level }
 
@@ -29,20 +27,11 @@ const directionToVector = (direction:Direction): Vector => {
     }
 }
 
-const addVector = (a:Vector, b:Vector):Vector => [a[0]+b[0], a[1]+b[1]];
-
-const sizeOfGrid = (grid: Grid):Vector => {
-    const sizeX = grid.length;
-    const sizeY = sizeX === 0 ? 0 : (grid[0] as Array<Cell>).length;
-    return [sizeX, sizeY];
-}
-
-
-const isValidPosition = (grid: Grid, pos: Vector): boolean => {
+const isValidPosition = (grid_: Grid, pos: Vector): boolean => {
     if (pos[0]<0 || pos[1]<0) return false;
-    const availableRange = sizeOfGrid(grid);
+    const availableRange = grid.size(grid_);
     if(pos[0]> availableRange[0]-1 || pos[1]> availableRange[1]-1 ) return false;
-    if ((grid[pos[0]] as Array<Cell>)[pos[1]] === 'Wall') return false;
+    if ((grid_[pos[0]] as Array<Cell>)[pos[1]] === 'Wall') return false;
     return true;
 }
 
