@@ -1,10 +1,13 @@
 import { GhostKind } from "./Ghost";
 import { Vector } from "./Vector";
 
-export type Cell = "Wall" | "Coin" | "Empty" | GhostKind | "Player";
-
 export const fieldToPlayerPos = (field: Cell[][]): Vector => "TODO" as any;
-
+export type Cell =
+  | { tag: "Wall" }
+  | { tag: "Coin" }
+  | { tag: "Ghost"; ind: number }
+  | { tag: "Empty" }
+  | { tag: "Player" };
 export type LevelSpec = {
   name: string;
   field: string;

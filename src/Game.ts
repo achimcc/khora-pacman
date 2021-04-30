@@ -1,5 +1,5 @@
 import { Level } from "./Level";
-import * as levelLib from "./Level";
+import * as level from "./Level";
 import { GhostKind } from "./Ghost";
 import { Grid, isValidPosition } from "./Grid";
 import * as grid from "./Grid";
@@ -14,12 +14,13 @@ export type Game = {
 
 type Config = { level: Level };
 
-const cellToCell = (cell: levelLib.Cell): grid.Cell => 1 as any;
+const cellToCell = (cell: level.Cell): grid.Cell =>
+  cell.tag === "Ghost" || cell.tag === "Player" ? "Empty" : cell.tag;
 
-const init = ({ level }: Config): Game => ({
-  grid: level.field.map((row) => row.map(cellToCell)),
+const init = ({ level: configLevel }: Config): Game => ({
+  grid: configLevel.field.map((row) => row.map(cellToCell)),
   player: {
-    pos: levelLib.fieldToPlayerPos(level.field),
+    pos: level.fieldToPlayerPos(configLevel.field),
     direction: 1 as any,
   },
   ghosts: 1 as any,
