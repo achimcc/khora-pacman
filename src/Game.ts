@@ -6,37 +6,23 @@ import * as grid from "./Grid";
 import { Vector, addVector } from "./Vector";
 import { Direction, directionToVector } from "./Direction";
 
-export type Game = {
-  grid: Grid;
-  player: { pos: Vector; direction: Direction };
-  ghosts: { pos: Vector; direction: Direction; ghostKind: GhostKind }[];
-};
+export type Game = Level;
 
 type Config = { level: Level };
 
-const cellToCell = (cell: level.Cell): grid.Cell =>
-  cell.tag === "Ghost" || cell.tag === "Player" ? "Empty" : cell.tag;
-
-const init = ({ level: configLevel }: Config): Game => ({
-  grid: configLevel.field.map((row) => row.map(cellToCell)),
-  player: {
-    pos: level.fieldToPlayerPos(configLevel.field),
-    direction: 1 as any,
-  },
-  ghosts: 1 as any,
-});
+const init = ({ level: configLevel }: Config): Game => configLevel;
 
 const timeTick = (game: Game): Game => {
   const nextPosToCheck = addVector(
-    game.player.pos,
+    game.player.position,
     directionToVector(game.player.direction)
   );
-  const nextPos = isValidPosition(game.grid, nextPosToCheck)
+  const nextPos = isValidPosition(game.field, nextPosToCheck)
     ? nextPosToCheck
-    : game.player.pos;
-  const newPlayer = { pos: nextPos, direction: game.player.direction };
+    : game.player.position;
+  const newPlayer = { position: nextPos, direction: game.player.direction };
   return {
-    grid: game.grid,
+    field: game.field,
     player: newPlayer,
     ghosts: game.ghosts,
   };

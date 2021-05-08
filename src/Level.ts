@@ -1,21 +1,25 @@
+import { Direction } from "./Direction";
 import { GhostKind } from "./Ghost";
 import { Vector } from "./Vector";
+import { Cell } from "./Grid";
 
-export const fieldToPlayerPos = (field: Cell[][]): Vector => "TODO" as any;
-export type Cell =
-  | { tag: "Wall" }
-  | { tag: "Coin" }
-  | { tag: "Ghost"; ind: number }
-  | { tag: "Empty" }
-  | { tag: "Player" };
 export type LevelSpec = {
   name: string;
   field: string;
+  ghosts: {};
 };
 
 export type Level = {
   field: Cell[][];
-  ghosts: { kind: GhostKind; position: [number, number] }[];
+  ghosts: {
+    kind: GhostKind;
+    position: Vector;
+    direction: Direction;
+  }[];
+  player: {
+    position: Vector;
+    direction: Direction;
+  };
 };
 
 const parseLevelSpec = (levelSpec: LevelSpec): Level | null => "TODO" as any;
